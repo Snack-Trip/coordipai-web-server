@@ -21,14 +21,14 @@ jobs:
     - name: SSH into Server and Deploy
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.PI_REMOTE_SSH_HOST }}
-        username: ${{ secrets.PI_REMOTE_SSH_USERNAME }}
-        key: ${{ secrets.PI_REMOTE_SSH_KEY }}
-        port: ${{ secrets.PI_REMOTE_SSH_PORT }}
+        host: ${{ secrets.REMOTE_SSH_HOST }}
+        username: ${{ secrets.REMOTE_SSH_USERNAME }}
+        key: ${{ secrets.REMOTE_SSH_KEY }}
+        port: ${{ secrets.REMOTE_SSH_PORT }}
         script: |
-          cd /home/${{ secrets.PI_REMOTE_SSH_USERNAME }}/Projects/snack-trip/coordipai-web-server
+          cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects/snack-trip/coordipai-web-server
           git pull origin main
-          cd /home/${{ secrets.PI_REMOTE_SSH_USERNAME }}/Projects
+          cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
           docker system prune -f
           docker compose build coordipai-web-server
           docker compose up -d --no-deps coordipai-web-server
