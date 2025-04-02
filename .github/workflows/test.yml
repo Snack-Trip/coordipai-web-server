@@ -1,0 +1,13 @@
+name: Test Secrets Access
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-secrets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Secrets Access
+        run: echo "REMOTE_SSH_HOST is available!"
+        env:
+          TEST_SECRET: ${{ secrets.PI_REMOTE_SSH_HOST }}
