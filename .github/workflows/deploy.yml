@@ -26,7 +26,6 @@ jobs:
           cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects/snack-trip/coordipai-web-server
           git pull origin main
           cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
-          docker system prune -f
-          docker compose build coordipai-web-server
-          docker compose up -d --build --no-deps coordipai-web-server
+          docker compose up -d --no-deps --build --force-recreate coordipai-web-server
+          docker image prune -af
 
