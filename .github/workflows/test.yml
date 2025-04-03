@@ -11,3 +11,14 @@ jobs:
         run: echo "REMOTE_SSH_HOST is available!"
         env:
           TEST_SECRET: ${{ secrets.PI_REMOTE_SSH_HOST }}
+
+      - name: SSH into server and check status
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.REMOTE_SSH_HOST }}
+          username: ${{ secrets.REMOTE_SSH_USERNAME }}
+          key: ${{ secrets.REMOTE_SSH_KEY }}
+          port: ${{ secrets.REMOTE_SSH_PORT }}
+          script: |
+            cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
+            cat a.txt
