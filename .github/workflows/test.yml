@@ -1,24 +1,36 @@
-name: Test Secrets Access
+name: Deploy FastAPI with Docker Compose
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
-  test-secrets:
+  deploy:
     runs-on: ubuntu-latest
-    steps:
-      - name: Check Secrets Access
-        run: echo "REMOTE_SSH_HOST is available!"
-        env:
-          TEST_SECRET: ${{ secrets.PI_REMOTE_SSH_HOST }}
 
-      - name: SSH into server and check status
-        uses: appleboy/ssh-action@master
+    steps:
+      - name: 🔄 Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🐳 Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: 🏗️ Build Docker Image
+        run: |
+          docker build -t coordipai-web-server:latest .
+
+      - name: 📂 Save Docker Image as tar
+        run: |
+          docker save -o coordipai-web-server.tar coordipai-web-server:latest
+
+      - name: 🚀 Copy Image to Remote Server
+        uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.REMOTE_SSH_HOST }}
           username: ${{ secrets.REMOTE_SSH_USERNAME }}
           key: ${{ secrets.REMOTE_SSH_KEY }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
-          script: |
-            cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
-            cat a.txt
+          source: "coordipai-web-server.tar"
+          target: "cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects/"
+          
