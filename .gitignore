@@ -1,0 +1,51 @@
+# macOS system files
+.DS_Store
+
+# VSCode settings folder
+.vscode/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment folders (Poetry, venv)
+.venv/
+venv/
+
+# Environment variables and configuration files
+.env
+*.env
+
+# Logs and temporary files
+logs/
+*.log
+*.tmp
+
+# Pytest and coverage results
+htmlcov/
+.coverage
+.tox/
+.nox/
+.pytest_cache/
+
+# mypy, pylint, flake8 cache files
+.mypy_cache/
+.pylint.d/
+flake8.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Poetry build-related folders
+dist/
+build/
+
+# IDE and editor configuration files
+.idea/
+*.iml
+
+# FastAPI static and media files
+staticfiles/
+media/
