@@ -40,13 +40,13 @@ jobs:
           key: ${{ secrets.REMOTE_SSH_KEY }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
-            mkdir -p coordipai
-            echo "${{ secrets.ENV_FILE }}" > coordipai/.env
+            cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
+            mkdir -p coordipai/web-server
+            echo "${{ secrets.ENV_FILE }}" > coordipai/web-server/.env
 
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
             docker pull ghcr.io/snack-trip/coordipai-web-server:latest
 
-            cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
             docker rm -f coordipai-web-server || true
             docker compose up -d coordipai-web-server
             docker image prune -f
