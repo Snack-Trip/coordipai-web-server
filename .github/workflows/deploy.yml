@@ -13,6 +13,28 @@ jobs:
     # needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
+      # - name: Log in to DockerHub
+      #   run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      # - name: Build Docker image
+      #   run: |
+      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-app:latest .
+
+      # - name: Push Docker image to DockerHub
+      #   run: |
+      #     docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-app:latest
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/${{ github.repository_owner }}/coordipai-web-server:latest .
+
+      - name: Push Docker image to GitHub Container Registry
+        run: |
+          docker push ghcr.io/${{ github.repository_owner }}/coordipai-web-server:latest
+
       # Get into server and start docker compose
       - name: SSH into Server and Deploy
         uses: appleboy/ssh-action@master
@@ -22,8 +44,9 @@ jobs:
           key: ${{ secrets.REMOTE_SSH_KEY }}
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
-            cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects/Coordipai/web-server
-            git pull origin main
-            cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
-            docker compose up -d --no-deps --build --force-recreate coordipai-web-server
-            docker image prune -af
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            docker pull ghcr.io/${{ github.repository_owner }}/coordipai-web-server:latest
+            cd /home/${{ secrets.SSH_USERNAME }}/Projects
+            docker compose rm -f coordipai-web-server
+            docker compose up -d coordipai-web-server
+            docker image prune -f
