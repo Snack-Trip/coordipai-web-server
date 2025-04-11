@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions:
+  packages: write
+  contents: read
+  id-token: write
+
 jobs:
   # Executes after build if request is pushing to main branch
   deploy:
