@@ -13,16 +13,8 @@ jobs:
     # needs: build
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
-      # - name: Log in to DockerHub
-      #   run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      # - name: Build Docker image
-      #   run: |
-      #     docker build -t ${{ secrets.DOCKER_USERNAME }}/fastapi-app:latest .
-
-      # - name: Push Docker image to DockerHub
-      #   run: |
-      #     docker push ${{ secrets.DOCKER_USERNAME }}/fastapi-app:latest
+      - name: Checkout source code
+        uses: actions/checkout@v3
 
       - name: Log in to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
@@ -35,7 +27,6 @@ jobs:
         run: |
           docker push ghcr.io/snack-trip/coordipai-web-server:latest
 
-      # Get into server and start docker compose
       - name: SSH into Server and Deploy
         uses: appleboy/ssh-action@master
         with:
