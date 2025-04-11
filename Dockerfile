@@ -24,6 +24,9 @@ COPY . /app
 # Expose FastAPI default port
 EXPOSE 8000
 
+# Set Python path to include src/
+ENV PYTHONPATH="/app/src"
+
 # Run the FastAPI application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
