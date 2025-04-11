@@ -43,6 +43,6 @@ jobs:
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
             docker pull ghcr.io/snack-trip/coordipai-web-server:latest
             cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
-            docker compose rm -f coordipai-web-server
+            docker rm -f coordipai-web-server || true
             docker compose up -d coordipai-web-server
             docker image prune -f
