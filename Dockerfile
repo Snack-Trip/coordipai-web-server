@@ -1,4 +1,4 @@
-FROM python:3.13-alpine
+FROM python:3.11-slim
 
 # Set the working directory
 WORKDIR /app
@@ -23,4 +23,5 @@ EXPOSE 8000
 ENV PYTHONPATH="/app/src/web_server"
 
 # Run the FastAPI application
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
