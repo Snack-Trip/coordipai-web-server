@@ -29,11 +29,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/coordipai-web-server:latest .
+          docker build -t ghcr.io/snack-trip/coordipai-web-server:latest .
 
       - name: Push Docker image to GitHub Container Registry
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/coordipai-web-server:latest
+          docker push ghcr.io/snack-trip/coordipai-web-server:latest
 
       # Get into server and start docker compose
       - name: SSH into Server and Deploy
@@ -45,7 +45,7 @@ jobs:
           port: ${{ secrets.REMOTE_SSH_PORT }}
           script: |
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ghcr.io/${{ github.repository_owner }}/coordipai-web-server:latest
+            docker pull ghcr.io/snack-trip/coordipai-web-server:latest
             cd /home/${{ secrets.SSH_USERNAME }}/Projects
             docker compose rm -f coordipai-web-server
             docker compose up -d coordipai-web-server
