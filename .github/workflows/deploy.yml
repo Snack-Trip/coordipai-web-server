@@ -41,23 +41,4 @@ jobs:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/coordipai/web-server
-
-      - name: SSH into Server and Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.REMOTE_SSH_HOST }}
-          username: ${{ secrets.REMOTE_SSH_USERNAME }}
-          key: ${{ secrets.REMOTE_SSH_KEY }}
-          port: ${{ secrets.REMOTE_SSH_PORT }}
-          script: |
-            cd /home/${{ secrets.REMOTE_SSH_USERNAME }}/Projects
-            mkdir -p coordipai/web-server
-            printf "%s" "${{ secrets.ENV_FILE }}" > coordipai/web-server/.env
-
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ghcr.io/coordipai/web-server
-
-            docker rm -f coordipai-web-server || true
-            docker compose up -d coordipai-web-server
-            docker image prune -f
+          tags: ghcr.io/snack-trip/coordipai-test-server
